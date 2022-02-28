@@ -1,15 +1,14 @@
 package com.example.dictionaryapp.domain.repository
 
-import android.util.Log
 import com.example.dictionaryapp.data.local.WordInfoDao
 import com.example.dictionaryapp.data.remote.DictionaryApi
 import com.example.dictionaryapp.domain.model.WordInfo
+import com.example.dictionaryapp.util.CustomExceptions
 import com.example.dictionaryapp.util.Resource
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import retrofit2.HttpException
 import java.io.IOException
-import java.lang.Exception
 
 class WordInfoRepositoryImp(
     private val api: DictionaryApi,
@@ -29,12 +28,12 @@ class WordInfoRepositoryImp(
             dao.insertWordInfo(remoteWordInfo.map { it.toWordInfoEntity() })
         }catch (e: HttpException){
             emit(Resource.Error(
-                message = "Something went wrong",
+                exception = CustomExceptions.NoInternetConnectionException(),
                 data = wordInfos
             ))
         }catch (e: IOException){
             emit(Resource.Error(
-                message = "Couldn't reach server, check your internet connection.",
+                exception = CustomExceptions.ApiNotResponding(),
                 data = wordInfos
             ))
         }

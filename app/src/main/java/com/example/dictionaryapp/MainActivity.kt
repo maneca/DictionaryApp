@@ -13,18 +13,18 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.example.dictionaryapp.data.local.entity.WordInfoEntity
 import com.example.dictionaryapp.domain.model.WordInfo
 import com.example.dictionaryapp.presentation.WordInfoViewModel
+import com.example.dictionaryapp.util.CustomExceptions
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -37,7 +37,11 @@ class MainActivity : ComponentActivity() {
                     when (event) {
                         is WordInfoViewModel.UIEvent.ShowSnackbar -> {
                             scaffoldState.snackbarHostState.showSnackbar(
-                                message = event.message
+                                message = when(event.exception){
+                                    is CustomExceptions.NoInternetConnectionException -> getString(R.string.no_network_connectivity)
+                                    is CustomExceptions.ApiNotResponding -> getString(R.string.api_not_responding)
+                                    else -> getString(R.string.something_went_wrong)
+                                }
                             )
                         }
                     }

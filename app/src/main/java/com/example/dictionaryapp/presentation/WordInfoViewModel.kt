@@ -5,6 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.dictionaryapp.domain.repository.WordInfoRepository
+import com.example.dictionaryapp.util.CustomExceptions
 import com.example.dictionaryapp.util.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
@@ -49,7 +50,7 @@ class WordInfoViewModel @Inject constructor(
                                 loading = false
                             )
                             _eventFlow.emit(UIEvent.ShowSnackbar(
-                                result.message ?: "Unknown Error"
+                                result.exception ?: CustomExceptions.UnknownException()
                             ))
                         }
                         is Resource.Loading -> {
@@ -64,6 +65,6 @@ class WordInfoViewModel @Inject constructor(
     }
 
     sealed class UIEvent{
-        data class ShowSnackbar(val message: String): UIEvent()
+        data class ShowSnackbar(val exception: Exception): UIEvent()
     }
 }
