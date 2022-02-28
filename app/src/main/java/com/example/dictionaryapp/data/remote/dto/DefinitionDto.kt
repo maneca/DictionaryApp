@@ -6,7 +6,7 @@ data class DefinitionDto(
     val antonyms: List<String>,
     val definition: String,
     val example: String,
-    val synonyms: String
+    val synonyms: List<String>
 ){
     fun toDefinition(): Definition{
         return Definition(

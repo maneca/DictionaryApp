@@ -6,9 +6,9 @@ import com.example.dictionaryapp.domain.model.License
 import com.example.dictionaryapp.domain.model.Meaning
 import com.example.dictionaryapp.domain.model.WordInfo
 
-@Entity
+@Entity(tableName = "wordInfo")
 data class WordInfoEntity(
-    @PrimaryKey(autoGenerate = true) val id: Int,
+    @PrimaryKey val id: Int? = null,
     val license: License,
     val meanings: List<Meaning>,
     val phonetic: String,
